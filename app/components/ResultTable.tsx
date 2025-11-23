@@ -1,30 +1,51 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function ResultTable({ results }: any) {
   return (
-    <div className="mt-4 max-h-[400px] overflow-auto border rounded">
-      <table className="min-w-full text-xs">
-        <thead className="bg-slate-200 sticky top-0">
-          <tr>
-            <th className="p-2 border">#</th>
-            <th className="p-2 border">Teks Asli</th>
-            <th className="p-2 border">Clean</th>
-            <th className="p-2 border">IndoBERT</th>
-            <th className="p-2 border">NB</th>
-            <th className="p-2 border">SVC</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((row: any, idx: number) => (
-            <tr key={idx} className="odd:bg-white even:bg-slate-100">
-              <td className="p-2 border text-center">{idx + 1}</td>
-              <td className="p-2 border">{row.full_text}</td>
-              <td className="p-2 border text-slate-600">{row.clean}</td>
-              <td className="p-2 border text-center">{row.bert}</td>
-              <td className="p-2 border text-center">{row.nb}</td>
-              <td className="p-2 border text-center font-bold">{row.svc}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Card className="mt-4">
+      <CardHeader>
+        <CardTitle>Hasil Analisis</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="max-h-[400px] overflow-auto rounded-md border">
+          <Table>
+            <TableHeader className="bg-slate-100 sticky top-0 z-10">
+              <TableRow>
+                <TableHead className="w-[50px]">#</TableHead>
+                <TableHead>Teks Asli</TableHead>
+                <TableHead>Clean</TableHead>
+                <TableHead className="text-center">IndoBERT</TableHead>
+                <TableHead className="text-center">NB</TableHead>
+                <TableHead className="text-center">SVC</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {results.map((row: any, idx: number) => (
+                <TableRow key={idx}>
+                  <TableCell className="font-medium text-center">
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell>{row.full_text}</TableCell>
+                  <TableCell className="text-slate-600">{row.clean}</TableCell>
+                  <TableCell className="text-center">{row.bert}</TableCell>
+                  <TableCell className="text-center">{row.nb}</TableCell>
+                  <TableCell className="text-center font-bold">
+                    {row.svc}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

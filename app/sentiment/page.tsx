@@ -5,6 +5,7 @@ import UploadForm from "../components/UploadForm";
 import StatusBox from "../components/StatusBox";
 import ResultTable from "../components/ResultTable";
 import SentimentChart from "../components/SentimentChart";
+import ApiStatus from "../components/ApiStatus";
 
 import { uploadFile, checkStatus, fetchResult } from "../lib/api";
 
@@ -45,28 +46,40 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen text-black bg-slate-100 p-6 flex justify-center">
-      <div className="max-w-5xl w-full space-y-6 bg-white rounded-xl p-6 shadow">
-        <h1 className="text-2xl font-bold">
-          Analisis Sentimen (FastAPI + Redis)
-        </h1>
+    <main className="min-h-screen bg-slate-50 p-6 md:p-12 relative">
+      <ApiStatus />
+      <div className="max-w-5xl mx-auto space-y-8">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Analisis Sentimen
+          </h1>
+          <p className="text-slate-500">
+            Upload file dengan format CSV.
+          </p>
+        </div>
 
-        <UploadForm
-          onChange={setFile}
-          onSubmit={startUpload}
-          disabled={status === "processing"}
-        />
+        <div className="grid gap-6">
+          <UploadForm
+            onChange={setFile}
+            onSubmit={startUpload}
+            disabled={status === "processing"}
+          />
 
-        <StatusBox status={status} jobId={jobId} />
+          <StatusBox status={status} jobId={jobId} />
 
-        {status === "done" && results.length > 0 && (
-          <>
-            <SentimentChart results={results} />
-            <ResultTable results={results} />
-          </>
-        )}
+          {error && (
+            <div className="p-4 text-sm text-red-800 bg-red-50 rounded-lg border border-red-200">
+              {error}
+            </div>
+          )}
 
-        {error && <p className="text-red-600">{error}</p>}
+          {status === "done" && results.length > 0 && (
+            <div className="grid gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <SentimentChart results={results} />
+              <ResultTable results={results} />
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );

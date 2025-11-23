@@ -1,6 +1,25 @@
 "use client";
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default function SentimentChart({ results }: any) {
   const dist = results.reduce(
@@ -26,8 +45,13 @@ export default function SentimentChart({ results }: any) {
   };
 
   return (
-    <div className="bg-slate-50 p-4 rounded border">
-      <Bar data={chartData} />
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Distribusi Sentimen</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Bar data={chartData} />
+      </CardContent>
+    </Card>
   );
 }
