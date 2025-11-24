@@ -1,25 +1,37 @@
 "use client";
 
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const chartConfig = {
+  count: {
+    label: "Jumlah",
+  },
+  positif: {
+    label: "Positif",
+    color: "#4ade80",
+  },
+  netral: {
+    label: "Netral",
+    color: "#60a5fa",
+  },
+  negatif: {
+    label: "Negatif",
+    color: "#f87171",
+  },
+} satisfies ChartConfig;
 
 export default function SentimentChart({ results }: any) {
   const dist = results.reduce(
@@ -33,24 +45,43 @@ export default function SentimentChart({ results }: any) {
     { positif: 0, netral: 0, negatif: 0 }
   );
 
-  const chartData = {
-    labels: ["Positif", "Netral", "Negatif"],
-    datasets: [
-      {
-        label: "Jumlah Sentimen",
-        data: [dist.positif, dist.netral, dist.negatif],
-        backgroundColor: ["#4ade80", "#60a5fa", "#f87171"],
-      },
-    ],
-  };
+  const chartData = [
+    { sentiment: "positif", count: dist.positif, fill: "var(--color-positif)" },
+    { sentiment: "netral", count: dist.netral, fill: "var(--color-netral)" },
+    { sentiment: "negatif", count: dist.negatif, fill: "var(--color-negatif)" },
+  ];
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Distribusi Sentimen</CardTitle>
+        <CardDescription>Hasil analisis sentimen dari data yang diinput</CardDescription>
       </CardHeader>
       <CardContent>
-        <Bar data={chartData} />
+        <ChartContainer config={chartConfig} className="min-h-[200px] w-[1000px]">
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="sentiment"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) =>
+                chartConfig[value as keyof typeof chartConfig]?.label
+              }
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="count" radius={8} />
+          </BarChart>
+        </ChartContainer>
       </CardContent>
     </Card>
   );

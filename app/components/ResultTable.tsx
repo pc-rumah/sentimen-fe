@@ -1,6 +1,7 @@
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -15,8 +16,9 @@ export default function ResultTable({ results }: any) {
         <CardTitle>Hasil Analisis</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="max-h-[400px] overflow-auto rounded-md border">
+        <div className="max-h-[400px] overflow-auto rounded-md border w-[1000px]">
           <Table>
+            <TableCaption>Total {results.length} data dianalisis.</TableCaption>
             <TableHeader className="bg-slate-100 sticky top-0 z-10">
               <TableRow>
                 <TableHead className="w-[50px]">#</TableHead>
